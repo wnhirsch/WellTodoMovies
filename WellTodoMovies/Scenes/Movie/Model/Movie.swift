@@ -11,25 +11,14 @@ struct Movie: Decodable {
     var id: Int
     var adult: Bool
     var backdropPath: String?
-    var belongsToCollection: Collection?
-    var budget: Int
-    var genres: [Gender]
-    var homepage: String?
-    var imdbId: String?
+    var genreIds: [Int]
     var originalLanguage: String
     var originalTitle: String
     var overview: String?
     var popularity: Double
     var posterPath: String?
-    var productionCompanies: [Company]
-    var productionCountries: [Country]
     var releaseDate: String
-    var revenue: Int
-    var runtime: Int
-    var spokenLanguages: [Language]
-    var status: Status
     var tagline: String?
-    var title: String
     var video: Bool
     var voteAverage: Double
     var voteCount: Int

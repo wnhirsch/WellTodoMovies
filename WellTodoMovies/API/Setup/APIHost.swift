@@ -18,6 +18,6 @@ enum APIHost {
     }
     
     static var language: String {
-        return Locale.autoupdatingCurrent.languageCode ?? "en"
+        return Locale.autoupdatingCurrent.languageCode ?? "en-US"
     }
 }

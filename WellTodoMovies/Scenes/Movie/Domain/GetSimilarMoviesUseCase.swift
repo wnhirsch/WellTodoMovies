@@ -1,5 +1,5 @@
 //
-//  GetMovieDetailsUseCase.swift
+//  GetSimilarMoviesUseCase.swift
 //  WellTodoMovies
 //
 //  Created by Wellington Nascente Hirsch on 18/04/21.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol GetMovieDetailsUseCaseProtocol {
-    typealias Success = ((MovieDetails) -> Void)
+protocol GetSimilarMoviesUseCaseProtocol {
+    typealias Success = ((RequestPage<Movie>) -> Void)
     typealias Failure = ((RequestError) -> Void)
 
-    func execute(id: Int, success: Success?, failure: Failure?)
+    func execute(id: Int, page: Int, success: Success?, failure: Failure?)
 }
 
-class GetMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol {
+class GetSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol {
 
     private let api: MovieRoutesProtocol
 
@@ -22,13 +22,13 @@ class GetMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol {
         self.api = api
     }
 
-    func execute(id: Int, success: Success? = nil, failure: Failure? = nil) {
-        api.getDetails(movieId: id) { (result) in
+    func execute(id: Int, page: Int, success: Success? = nil, failure: Failure? = nil) {
+        api.getSimilar(movieId: id, page: page) { (result) in
             switch result {
             case let .success(response):
                 do {
-                    let movie = try response.mapObject(MovieDetails.self)
-                    success?(movie)
+                    let movies = try response.mapObject(RequestPage<Movie>.self)
+                    success?(movies)
                 } catch let error {
                     print(error)
                     failure?(RequestError.defaultError())
