@@ -100,6 +100,54 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		22E0A6CB262BB8FE003A752A /* API */ = {
+			isa = PBXGroup;
+			children = (
+				22E0A6D2262BB969003A752A /* Setup */,
+				22E0A6D3262BB971003A752A /* Routes */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		22E0A6CF262BB905003A752A /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				2228DA09262A58C4005002A6 /* Main */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		22E0A6D0262BB910003A752A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				22E7E4E1262A58100066DB0D /* Assets.xcassets */,
+				22E7E4E6262A58100066DB0D /* Info.plist */,
+				22E7E4E3262A58100066DB0D /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		22E0A6D1262BB91C003A752A /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		22E0A6D2262BB969003A752A /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
+		22E0A6D3262BB971003A752A /* Routes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Routes;
+			sourceTree = "<group>";
+		};
 		22E7E4CC262A580F0066DB0D = {
 			isa = PBXGroup;
 			children = (
@@ -125,10 +173,10 @@
 		22E7E4D7262A580F0066DB0D /* WellTodoMovies */ = {
 			isa = PBXGroup;
 			children = (
-				22E7E4E1262A58100066DB0D /* Assets.xcassets */,
-				22E7E4E6262A58100066DB0D /* Info.plist */,
-				22E7E4E3262A58100066DB0D /* LaunchScreen.storyboard */,
-				2228DA09262A58C4005002A6 /* Main */,
+				22E0A6CB262BB8FE003A752A /* API */,
+				22E0A6D1262BB91C003A752A /* Coordinators */,
+				22E0A6CF262BB905003A752A /* Scenes */,
+				22E0A6D0262BB910003A752A /* Supporting Files */,
 				22E7E4D8262A580F0066DB0D /* AppDelegate.swift */,
 				22E7E4DA262A580F0066DB0D /* SceneDelegate.swift */,
 			);

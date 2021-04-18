@@ -7,6 +7,7 @@ target 'WellTodoMovies' do
 
   # Pods for WellTodoMovies
   pod 'Alamofire', '~> 5.2'
+  pod 'Moya', '~> 14.0'
 
   target 'WellTodoMoviesTests' do
     inherit! :search_paths
