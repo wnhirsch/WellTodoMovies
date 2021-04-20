@@ -13,6 +13,10 @@ enum APIHost {
         return URL(string: "https://api.themoviedb.org/")!
     }
     
+    static var baseImageURL: URL {
+        return URL(string: "https://image.tmdb.org/t/p/original")!
+    }
+    
     static var apiKey: String {
         return "a767131adda7e3bbc22369a6e3b2bae4"
     }

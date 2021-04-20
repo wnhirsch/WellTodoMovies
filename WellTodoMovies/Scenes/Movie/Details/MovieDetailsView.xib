@@ -16,19 +16,27 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="p9E-M6-H7T">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HNa-Mw-gTV">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="p9E-M6-H7T" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="ANT-m1-YXy"/>
-                <constraint firstItem="p9E-M6-H7T" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="b6Y-KF-s4V"/>
-                <constraint firstItem="p9E-M6-H7T" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="hTf-xI-vtb"/>
-                <constraint firstItem="p9E-M6-H7T" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="siO-pg-sn5"/>
+                <constraint firstItem="p9E-M6-H7T" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="ANT-m1-YXy"/>
+                <constraint firstItem="HNa-Mw-gTV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="R90-Lr-0nL"/>
+                <constraint firstItem="HNa-Mw-gTV" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ael-2h-PgX"/>
+                <constraint firstItem="p9E-M6-H7T" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="b6Y-KF-s4V"/>
+                <constraint firstItem="HNa-Mw-gTV" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="top" id="d3y-ku-cGn"/>
+                <constraint firstItem="p9E-M6-H7T" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="hTf-xI-vtb"/>
+                <constraint firstAttribute="trailing" secondItem="HNa-Mw-gTV" secondAttribute="trailing" id="pll-V5-PtI"/>
+                <constraint firstItem="p9E-M6-H7T" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="siO-pg-sn5"/>
             </constraints>
             <connections>
+                <outlet property="statusBarBackgroundView" destination="HNa-Mw-gTV" id="lGC-sn-5Vf"/>
                 <outlet property="tableView" destination="p9E-M6-H7T" id="0TI-sx-Hb9"/>
             </connections>
             <point key="canvasLocation" x="99" y="94"/>

@@ -8,20 +8,22 @@
 import UIKit
 
 protocol MovieDetailsViewModelProtocol {
-//    var movieHeaderViewModel: MovieHeaderViewModelProtocol { get }
-    var cachedSimilarMovies: [Movie] { get }
+    var isLoadingSimilarMovies: Bool { get }
     
-    var onChangeSimilarMovies: (() -> Void)? { get set }
+    var onSetSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
+    var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
     
-    func clickMovie()
+    func fetchMoreSimilarMovies()
 }
 
 class MovieDetailsView: UIView {
 
+    private let tableDataSource = TableViewDataSource()
     private var viewModel: MovieDetailsProtocol?
 
     // MARK: - UI Components
     @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var statusBarBackgroundView: UIView!
     
     // MARK: - View life cycle
     override func awakeFromNib() {
@@ -33,8 +35,11 @@ class MovieDetailsView: UIView {
     func bindIn(viewModel: MovieDetailsProtocol) {
         self.viewModel = viewModel
         
-        self.viewModel?.onChangeSimilarMovies = { [weak self] in
-            self?.tableView.reloadData()
+        self.viewModel?.onSetSimilarMovies = { [weak self] section in
+            self?.tableDataSource.sections = [section]
+        }
+        self.viewModel?.onAppendSimilarMovies = { [weak self] section in
+            self?.tableDataSource.sections.append(section)
         }
     }
 }
@@ -44,33 +49,31 @@ extension MovieDetailsView {
     private func setup() {
         backgroundColor = .black
         setupTableView()
+        setupStatusBarBackgroundView()
     }
 
     private func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SimilarMovieCell")
-        tableView.delegate = self
-        tableView.dataSource = self
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .singleLine
+        tableView.showsVerticalScrollIndicator = true
+        tableDataSource.tableView = tableView
+        tableDataSource.scrollDelegate = self
+    }
+    
+    private func setupStatusBarBackgroundView() {
+        let gradient = CAGradientLayer()
+        gradient.frame = statusBarBackgroundView.bounds
+        gradient.colors = [UIColor.black.withAlphaComponent(0.75).cgColor, UIColor.clear.cgColor]
+        statusBarBackgroundView.layer.insertSublayer(gradient, at: 0)
     }
 }
 
-extension MovieDetailsView: UITableViewDelegate, UITableViewDataSource {
+extension MovieDetailsView: UIScrollViewDelegate {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.cachedSimilarMovies.count ?? Int.zero
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SimilarMovieCell") else {
-            return UITableViewCell()
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if !(viewModel?.isLoadingSimilarMovies ?? true) &&
+            scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) {
+            viewModel?.fetchMoreSimilarMovies()
         }
-        
-        cell.textLabel?.text = viewModel?.cachedSimilarMovies[indexPath.row].originalTitle
-        
-        return cell
     }
-    
 }

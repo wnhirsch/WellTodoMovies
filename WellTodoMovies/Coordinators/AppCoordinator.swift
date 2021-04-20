@@ -10,7 +10,6 @@ import UIKit
 class AppCoordinator {
 
     private let window: UIWindow
-
     private(set) var childCoordinator: CoordinatorProtocol?
 
     init(window: UIWindow) {
@@ -18,13 +17,15 @@ class AppCoordinator {
     }
 
     func start() {
-        window.rootViewController = getFirstCoordinator()
-        window.makeKeyAndVisible()
+        Genres.shared.updateData(completion: { [weak self] _ in
+            self?.setFirstCoordinator()
+        })
     }
-
-    private func getFirstCoordinator() -> UIViewController {
+    
+    private func setFirstCoordinator() {
         let movieCoordinator = MovieCoordinator()
         childCoordinator = movieCoordinator
-        return movieCoordinator.containerViewController
+        window.rootViewController = movieCoordinator.containerViewController
+        window.makeKeyAndVisible()
     }
 }

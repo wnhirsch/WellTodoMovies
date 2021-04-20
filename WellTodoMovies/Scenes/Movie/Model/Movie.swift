@@ -26,11 +26,6 @@ struct Movie: Decodable {
 
 extension Movie {
     
-    struct Gender: Decodable {
-        var id: Int
-        var name: String
-    }
-    
     struct Company: Decodable {
         var id: Int
         var name: String

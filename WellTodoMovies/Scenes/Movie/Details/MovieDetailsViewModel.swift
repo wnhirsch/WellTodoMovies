@@ -17,51 +17,49 @@ protocol MovieDetailsProtocol: MovieDetailsViewModelProtocol {
     var onFailureGetSimilarMovies: ((String) -> Void)? { get set }
     
     func fetchSimilarMovies()
-    func loadMoreSimilarMovies()
 }
 
 class MovieDetailsViewModel: MovieDetailsProtocol {
     
     private let getSimilarMoviesUseCase: GetSimilarMoviesUseCase
     private var actualPage: Int = 1
-    
-    var cachedSimilarMovies: [Movie] = []
+    private var totalPages: Int = 1
+    private var cachedSimilarMovies: [Movie] = []
+    var isLoadingSimilarMovies: Bool = false
     
     var onStartGetSimilarMovies: (() -> Void)?
     var onEmptyGetSimilarMovies: (() -> Void)?
     var onSuccessGetSimilarMovies: (() -> Void)?
     var onFailureGetSimilarMovies: ((String) -> Void)?
     
-    var onChangeSimilarMovies: (() -> Void)?
+    var onSetSimilarMovies: ((SimilarMovieSection) -> Void)?
+    var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)?
     var onTapSimilarMovie: ((Movie) -> Void)?
     
     init(getSimilarMoviesUseCase: GetSimilarMoviesUseCase) {
         self.getSimilarMoviesUseCase = getSimilarMoviesUseCase
     }
     
-//    var movieHeaderViewModel: MovieHeaderViewModelProtocol {
-//        return MovieHeaderViewModel()
-//    }
-//    var similarMovieViewModels: [SimilarMovieViewModelProtocol] {
-//        return [SimilarMovieViewModel()]
-//    }
-    
-    func clickMovie() {
-        // TODO
+    func clickMovie(movie: Movie) {
+        
     }
 }
 
 extension MovieDetailsViewModel {
     
     func fetchSimilarMovies() {
+        isLoadingSimilarMovies = true
         cachedSimilarMovies.removeAll()
         actualPage = 1
         getSimilarMovies()
     }
     
-    func loadMoreSimilarMovies() {
-        actualPage += 1
-        getSimilarMovies()
+    func fetchMoreSimilarMovies() {
+        if actualPage < totalPages {
+            isLoadingSimilarMovies = true
+            actualPage += 1
+            getSimilarMovies()
+        }
     }
     
     private func getSimilarMovies() {
@@ -70,21 +68,31 @@ extension MovieDetailsViewModel {
         }
         
         getSimilarMoviesUseCase.execute(id: 550, page: actualPage, success: { [weak self] movies in
+            self?.totalPages = movies.totalPages
             self?.handleSuccess(movies: movies.results)
+            self?.isLoadingSimilarMovies = false
         }, failure: { [weak self] (error) in
             self?.onFailureGetSimilarMovies?(error.statusMessage)
+            self?.isLoadingSimilarMovies = false
         })
     }
     
     private func handleSuccess(movies: [Movie]) {
         cachedSimilarMovies.append(contentsOf: movies)
-        print(movies)
+        let section = SimilarMovieSection(viewModels: movies.map({ SimilarMovieCellViewModel(movie: $0, onClick: clickMovie)
+        }))
         
-        onChangeSimilarMovies?()
-        if cachedSimilarMovies.isEmpty {
-            onEmptyGetSimilarMovies?()
+//        print(movies.map({ $0.originalTitle }))
+        
+        if actualPage > 1 {
+            onAppendSimilarMovies?(section)
         } else {
-            onSuccessGetSimilarMovies?()
+            if cachedSimilarMovies.isEmpty {
+                onEmptyGetSimilarMovies?()
+            } else {
+                onSuccessGetSimilarMovies?()
+            }
+            onSetSimilarMovies?(section)
         }
     }
 }

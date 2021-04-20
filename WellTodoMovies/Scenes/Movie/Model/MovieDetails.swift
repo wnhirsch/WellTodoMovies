@@ -13,7 +13,7 @@ struct MovieDetails: Decodable {
     var backdropPath: String?
     var belongsToCollection: Collection?
     var budget: Int
-    var genres: [Movie.Gender]
+    var genres: [GenresModel.Genre]
     var homepage: String?
     var imdbId: String?
     var originalLanguage: String
