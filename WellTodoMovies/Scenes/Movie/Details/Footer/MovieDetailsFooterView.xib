@@ -17,13 +17,13 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="UJU-ep-uQ8">
                     <rect key="frame" x="16" y="32" width="382" height="96"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VFV-fP-KXF">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VFV-fP-KXF" customClass="Button" customModule="WellTodoMovies" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="382" height="40"/>
                             <state key="normal" title="Button" image="heart" catalog="system">
                                 <color key="titleColor" systemColor="linkColor"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t1Z-AM-cch">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t1Z-AM-cch" customClass="Button" customModule="WellTodoMovies" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="56" width="382" height="40"/>
                             <state key="normal" title="Button"/>
                         </button>

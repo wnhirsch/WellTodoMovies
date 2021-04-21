@@ -12,11 +12,18 @@ class MovieDetailsFooterViewModel: MovieDetailsFooterViewModelProtocol {
     var isLiked: Bool = false
     var isOnMyLists: Bool = false
     
+    var onLikeChange: ((Bool) -> Void)?
+    var onMyListsChange: ((Bool) -> Void)?
+    
     func likeButtonClick() {
         isLiked = !isLiked
+        onLikeChange?(isLiked)
     }
     
     func myListButtonClick() {
-        isOnMyLists = !isOnMyLists
+        if !isOnMyLists {
+            isOnMyLists = true
+            onMyListsChange?(isOnMyLists)
+        }
     }
 }

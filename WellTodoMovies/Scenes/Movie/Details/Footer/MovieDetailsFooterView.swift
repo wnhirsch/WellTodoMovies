@@ -11,6 +11,9 @@ protocol MovieDetailsFooterViewModelProtocol {
     var isLiked: Bool { get }
     var isOnMyLists: Bool { get }
     
+    var onLikeChange: ((Bool) -> Void)? { get set }
+    var onMyListsChange: ((Bool) -> Void)? { get set }
+    
     func likeButtonClick()
     func myListButtonClick()
 }
@@ -21,8 +24,8 @@ class MovieDetailsFooterView: UIView {
 
     // MARK: - UI Components
     @IBOutlet weak var contentView: UIView?
-    @IBOutlet private weak var likeButton: UIButton!
-    @IBOutlet private weak var myListButton: UIButton!
+    @IBOutlet private weak var likeButton: Button!
+    @IBOutlet private weak var myListButton: Button!
     
     // MARK: - Init
     override func awakeFromNib() {
@@ -34,27 +37,47 @@ class MovieDetailsFooterView: UIView {
     func bindIn(viewModel: MovieDetailsFooterViewModelProtocol) {
         self.viewModel = viewModel
         
-        likeButton.isSelected = viewModel.isLiked
-        myListButton.isSelected = viewModel.isOnMyLists
+        self.viewModel?.onLikeChange = { [weak self] isLiked in
+            self?.setLikeButtonStatus(isSelected: isLiked)
+        }
+        self.viewModel?.onMyListsChange = { [weak self] isOnMyLists in
+            self?.setMyListsButtonStatus(isSelected: isOnMyLists)
+        }
+        
+        setLikeButtonStatus(isSelected: viewModel.isLiked)
+        setMyListsButtonStatus(isSelected: viewModel.isOnMyLists)
     }
     
     // MARK: - Actions
     @objc func didTapLikeButton() {
-        likeButton.isSelected = !likeButton.isSelected
-        likeButton.layer.backgroundColor = (likeButton.isSelected ?
-            UIColor.accent.cgColor : UIColor.black.cgColor)
-        likeButton.tintColor = (likeButton.isSelected ? UIColor.white : UIColor.accent)
-        
         viewModel?.likeButtonClick()
     }
     
     @objc func didTapMyListButton() {
-        myListButton.isSelected = !myListButton.isSelected
-        myListButton.layer.backgroundColor = (myListButton.isSelected ?
-            UIColor.accent.cgColor : UIColor.black.cgColor)
-        myListButton.tintColor = (likeButton.isSelected ? UIColor.white : UIColor.accent)
-        
         viewModel?.myListButtonClick()
+    }
+    
+    // MARK: - Utils
+    func setLikeButtonStatus(isSelected: Bool) {
+        if isSelected {
+            likeButton.style = .primary
+            likeButton.title = "liked".localized(context: .movieDetailsFooter)
+            likeButton.image = UIImage.heartFill
+        } else {
+            likeButton.style = .secondary
+            likeButton.title = "like".localized(context: .movieDetailsFooter)
+            likeButton.image = UIImage.heart
+        }
+    }
+    
+    func setMyListsButtonStatus(isSelected: Bool) {
+        if isSelected {
+            myListButton.style = .primary
+            myListButton.title = "myList.added".localized(context: .movieDetailsFooter)
+        } else {
+            myListButton.style = .secondary
+            myListButton.title = "myList.add".localized(context: .movieDetailsFooter)
+        }
     }
 }
 
@@ -67,36 +90,15 @@ extension MovieDetailsFooterView {
     }
     
     private func setupLikeButton() {
-        likeButton.layer.cornerRadius = 8
-        likeButton.layer.borderWidth = 1
-        likeButton.layer.borderColor = UIColor.accent.cgColor
-        likeButton.layer.backgroundColor = UIColor.black.cgColor
-        likeButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 8)
-        
-        likeButton.setTitle("like".localized(context: .movieDetailsFooter), for: .normal)
-        likeButton.setTitle("liked".localized(context: .movieDetailsFooter), for: .selected)
-        
-        likeButton.setTitleColor(UIColor.accent, for: .normal)
-        likeButton.setTitleColor(UIColor.white, for: .selected)
-        
-        likeButton.setImage(UIImage.heart, for: .normal)
-        likeButton.setImage(UIImage.heartFill, for: .selected)
-        
+        likeButton.style = .secondary
+        likeButton.title = "like".localized(context: .movieDetailsFooter)
+        likeButton.image = UIImage.heart
         likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
     }
     
     private func setupMyListButton() {
-        myListButton.layer.cornerRadius = 8
-        myListButton.layer.borderWidth = 1
-        myListButton.layer.borderColor = UIColor.accent.cgColor
-        myListButton.layer.backgroundColor = UIColor.black.cgColor
-        
-        myListButton.setTitle("myList.add".localized(context: .movieDetailsFooter), for: .normal)
-        myListButton.setTitle("myList.added".localized(context: .movieDetailsFooter), for: .selected)
-        
-        myListButton.setTitleColor(UIColor.accent, for: .normal)
-        myListButton.setTitleColor(UIColor.white, for: .selected)
-        
+        myListButton.style = .secondary
+        myListButton.title = "myList.add".localized(context: .movieDetailsFooter)
         myListButton.addTarget(self, action: #selector(didTapMyListButton), for: .touchUpInside)
     }
 }

@@ -32,7 +32,6 @@ extension Genres: GenresProtocol {
         self.forMoviesUseCase.execute(success: { [weak self] result in
             self?.forMovies.removeAll()
             result.genres.forEach({ self?.forMovies[$0.id] = $0.name })
-            print(self?.forMovies)
             completion?(true)
         }, failure: { error in
             print(error.statusMessage)
