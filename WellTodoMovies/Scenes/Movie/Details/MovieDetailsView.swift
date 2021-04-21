@@ -56,6 +56,11 @@ extension MovieDetailsView {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .singleLine
         tableView.showsVerticalScrollIndicator = true
+        
+        let footerView = MovieDetailsFooterView.loadNib()
+        footerView.bindIn(viewModel: MovieDetailsFooterViewModel())
+        tableView.tableFooterView = footerView
+        
         tableDataSource.tableView = tableView
         tableDataSource.scrollDelegate = self
     }

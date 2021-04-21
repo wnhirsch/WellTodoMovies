@@ -68,7 +68,7 @@ extension MovieDetailsViewModel {
         }
         
         getSimilarMoviesUseCase.execute(id: 550, page: actualPage, success: { [weak self] movies in
-            self?.totalPages = movies.totalPages
+            self?.totalPages = 1 // movies.totalPages
             self?.handleSuccess(movies: movies.results)
             self?.isLoadingSimilarMovies = false
         }, failure: { [weak self] (error) in
@@ -81,8 +81,6 @@ extension MovieDetailsViewModel {
         cachedSimilarMovies.append(contentsOf: movies)
         let section = SimilarMovieSection(viewModels: movies.map({ SimilarMovieCellViewModel(movie: $0, onClick: clickMovie)
         }))
-        
-//        print(movies.map({ $0.originalTitle }))
         
         if actualPage > 1 {
             onAppendSimilarMovies?(section)

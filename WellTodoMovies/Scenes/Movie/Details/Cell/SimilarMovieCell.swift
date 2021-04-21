@@ -36,7 +36,7 @@ class SimilarMovieCell: UITableViewCell {
     func bindIn(viewModel: SimilarMovieCellProtocol) {
         self.viewModel = viewModel
 
-        posterImageView.imageBy(url: viewModel.posterURL, placeholder: UIImage(named: "PosterPlaceholder"))
+        posterImageView.imageBy(url: viewModel.posterURL, placeholder: UIImage.posterPlaceholder)
         titleLabel.text = viewModel.title
         yearLabel.text = viewModel.year
         genresLabel.text = viewModel.genres
@@ -60,7 +60,7 @@ extension SimilarMovieCell {
 
     private func setupPosterImageView() {
         posterImageView.contentMode = .scaleAspectFill
-        posterImageView.image = UIImage(named: "PosterPlaceholder")
+        posterImageView.image = UIImage.posterPlaceholder
     }
 
     private func setupTitleLabel() {
