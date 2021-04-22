@@ -10,8 +10,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="MovieDetailsFooterView" customModule="WellTodoMovies" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="160"/>
+        <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB" customClass="MovieDetailsFooterView" customModule="WellTodoMovies" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="178"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="UJU-ep-uQ8">
@@ -34,7 +34,7 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="UJU-ep-uQ8" secondAttribute="trailing" constant="16" id="8Hu-M3-lE6"/>
                 <constraint firstItem="UJU-ep-uQ8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="32" id="CrZ-gv-a2s"/>
-                <constraint firstAttribute="bottom" secondItem="UJU-ep-uQ8" secondAttribute="bottom" constant="32" id="fqr-4m-7TH"/>
+                <constraint firstAttribute="bottom" secondItem="UJU-ep-uQ8" secondAttribute="bottom" constant="50" id="fqr-4m-7TH"/>
                 <constraint firstItem="UJU-ep-uQ8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="lSh-zZ-hhf"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

@@ -56,10 +56,16 @@ extension MovieDetailsView {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .singleLine
         tableView.showsVerticalScrollIndicator = true
+        tableView.insetsContentViewsToSafeArea = false
+        tableView.contentInsetAdjustmentBehavior = .never
         
         let footerView = MovieDetailsFooterView.loadNib()
         footerView.bindIn(viewModel: MovieDetailsFooterViewModel())
         tableView.tableFooterView = footerView
+        
+        let headerView = MovieDetailsHeaderView.loadNib()
+        headerView.bindIn(viewModel: MovieDetailsHeaderViewModel())
+        tableView.tableHeaderView = headerView
         
         tableDataSource.tableView = tableView
         tableDataSource.scrollDelegate = self
@@ -68,8 +74,12 @@ extension MovieDetailsView {
     private func setupStatusBarBackgroundView() {
         let gradient = CAGradientLayer()
         gradient.frame = statusBarBackgroundView.bounds
-        gradient.colors = [UIColor.black.withAlphaComponent(0.75).cgColor, UIColor.clear.cgColor]
+        gradient.colors = [UIColor.black.withAlphaComponent(0.4).cgColor,
+                           UIColor.black.withAlphaComponent(0.2).cgColor,
+                           UIColor.clear.cgColor]
+        gradient.locations = [0, 0.6, 1]
         statusBarBackgroundView.layer.insertSublayer(gradient, at: 0)
+        statusBarBackgroundView.backgroundColor = .clear
     }
 }
 

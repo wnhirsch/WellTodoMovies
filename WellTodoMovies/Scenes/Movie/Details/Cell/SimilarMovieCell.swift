@@ -65,19 +65,19 @@ extension SimilarMovieCell {
 
     private func setupTitleLabel() {
         titleLabel.numberOfLines = 1
-        titleLabel.font = UIFont(name: "system", size: 20)
+        titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textColor = .white
     }
     
     private func setupYearLabel() {
         yearLabel.numberOfLines = 1
-        yearLabel.font = UIFont(name: "system", size: 16)
+        yearLabel.font = UIFont.systemFont(ofSize: 16)
         yearLabel.textColor = .white
     }
     
     private func setupGenresLabel() {
         genresLabel.numberOfLines = 1
-        genresLabel.font = UIFont(name: "system", size: 16)
+        genresLabel.font = UIFont.systemFont(ofSize: 16)
         genresLabel.textColor = .lightGray
     }
 }

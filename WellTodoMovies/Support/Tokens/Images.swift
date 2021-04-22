@@ -9,8 +9,8 @@ import UIKit
 
 extension UIImage {
     
-    static var posterPlaceholder: UIImage {
-        return UIImage(named: "PosterPlaceholder") ?? UIImage()
+    static var circle: UIImage {
+        return UIImage(systemName: "circle") ?? UIImage()
     }
     
     static var heart: UIImage {
@@ -19,6 +19,10 @@ extension UIImage {
     
     static var heartFill: UIImage {
         return UIImage(systemName: "heart.fill") ?? UIImage()
+    }
+    
+    static var posterPlaceholder: UIImage {
+        return UIImage(named: "PosterPlaceholder") ?? UIImage()
     }
     
 }

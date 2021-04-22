@@ -23,7 +23,6 @@ class MovieDetailsFooterView: UIView {
     private var viewModel: MovieDetailsFooterViewModelProtocol?
 
     // MARK: - UI Components
-    @IBOutlet weak var contentView: UIView?
     @IBOutlet private weak var likeButton: Button!
     @IBOutlet private weak var myListButton: Button!
     
