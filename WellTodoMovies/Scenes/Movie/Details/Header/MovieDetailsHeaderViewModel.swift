@@ -42,7 +42,11 @@ class MovieDetailsHeaderViewModel: MovieDetailsHeaderViewModelProtocol {
         }
     }
     var popularity: String {
-        return "\(movie?.popularity ?? 0.0)%"
+        if let popularity = movie?.popularity, popularity >= 1.0 {
+            return "views.default".localizedWithArgs(context: .movieDetailsHeader, [popularity])
+        } else {
+            return "views.zero".localized(context: .movieDetailsHeader)
+        }
     }
     
     func likeButtonClick() {

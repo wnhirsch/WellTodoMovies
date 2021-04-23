@@ -89,13 +89,13 @@ class MovieDetailsHeaderView: UIView {
                     animatedImage.transform = scaleTransform.concatenating(translationTransform)
                 }, completion: { finished in
                     animatedImage.removeFromSuperview()
-                    UIView.animate(withDuration: 0.1, delay: 0.2, options: [.curveEaseOut], animations: {
+                    UIView.animate(withDuration: 0.1, delay: 0.1, options: [.curveEaseOut], animations: {
                         self.likesImageView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
                     }, completion: { finished in
                         UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseIn], animations: {
                             self.likesImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                         }, completion: { finished in
-                            
+                            self.likesImageView.transform = .identity
                         })
                     })
                 })

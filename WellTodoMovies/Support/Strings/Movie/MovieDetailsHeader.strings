@@ -3,3 +3,6 @@
 "likes.hundreds" = "%d Likes";
 "likes.thousands" = "%.1fK Likes";
 "likes.millions" = "%.1fM Likes";
+
+"views.zero" = "No Views";
+"views.default" = "%.0f Views";
