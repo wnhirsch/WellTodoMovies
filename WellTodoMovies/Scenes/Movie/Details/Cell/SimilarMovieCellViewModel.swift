@@ -24,7 +24,7 @@ struct SimilarMovieCellViewModel: SimilarMovieCellProtocol {
         return APIHost.baseImageURL.appendingPathComponent(movie.posterPath ?? String())
     }
     var title: String {
-        return movie.originalTitle
+        return movie.title
     }
     var year: String? {
         return movie.releaseDate

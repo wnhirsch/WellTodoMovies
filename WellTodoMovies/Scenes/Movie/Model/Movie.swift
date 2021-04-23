@@ -8,17 +8,17 @@
 import Foundation
 
 struct Movie: Decodable {
-    var id: Int
-    var adult: Bool
-    var backdropPath: String?
-    var genreIds: [Int]
-    var originalLanguage: String
-    var originalTitle: String
-    var overview: String?
-    var popularity: Double
     var posterPath: String?
+    var adult: Bool
+    var overview: String?
     var releaseDate: String
-    var tagline: String?
+    var genreIds: [Int]
+    var id: Int
+    var originalTitle: String
+    var originalLanguage: String
+    var title: String
+    var backdropPath: String?
+    var popularity: Double
     var video: Bool
     var voteAverage: Double
     var voteCount: Int

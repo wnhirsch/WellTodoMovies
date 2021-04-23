@@ -9,6 +9,10 @@ import UIKit
 
 extension UIImage {
     
+    static var back: UIImage {
+        return UIImage(named: "Back") ?? UIImage()
+    }
+    
     static var circle: UIImage {
         return UIImage(systemName: "circle") ?? UIImage()
     }

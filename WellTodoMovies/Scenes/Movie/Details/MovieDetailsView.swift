@@ -8,8 +8,10 @@
 import UIKit
 
 protocol MovieDetailsViewModelProtocol {
+    var headerViewModel: MovieDetailsHeaderViewModelProtocol { get }
     var isLoadingSimilarMovies: Bool { get }
     
+    var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)? { get set }
     var onSetSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
     var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
     
@@ -35,12 +37,24 @@ class MovieDetailsView: UIView {
     func bindIn(viewModel: MovieDetailsProtocol) {
         self.viewModel = viewModel
         
+        self.viewModel?.onChangeMovieDetails = { [weak self] headerViewModel in
+            self?.setupTableHeaderView(viewModel: headerViewModel)
+        }
         self.viewModel?.onSetSimilarMovies = { [weak self] section in
             self?.tableDataSource.sections = [section]
         }
         self.viewModel?.onAppendSimilarMovies = { [weak self] section in
             self?.tableDataSource.sections.append(section)
         }
+        
+        setupTableHeaderView(viewModel: viewModel.headerViewModel)
+    }
+    
+    // MARK: - Utils
+    func setupTableHeaderView(viewModel: MovieDetailsHeaderViewModelProtocol) {
+        let headerView = MovieDetailsHeaderView.loadNib()
+        headerView.bindIn(viewModel: viewModel)
+        tableView.tableHeaderView = headerView
     }
 }
 
@@ -62,10 +76,6 @@ extension MovieDetailsView {
         let footerView = MovieDetailsFooterView.loadNib()
         footerView.bindIn(viewModel: MovieDetailsFooterViewModel())
         tableView.tableFooterView = footerView
-        
-        let headerView = MovieDetailsHeaderView.loadNib()
-        headerView.bindIn(viewModel: MovieDetailsHeaderViewModel())
-        tableView.tableHeaderView = headerView
         
         tableDataSource.tableView = tableView
         tableDataSource.scrollDelegate = self

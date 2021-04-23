@@ -1,0 +1,5 @@
+"likes.zero" = "No Likes";
+"likes.one" = "1 Like";
+"likes.hundreds" = "%d Likes";
+"likes.thousands" = "%.1fK Likes";
+"likes.millions" = "%.1fM Likes";

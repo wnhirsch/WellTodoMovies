@@ -9,6 +9,7 @@ import Foundation
 
 enum LocalizableFiles: String {
     case `default` = "Default"
+    case movieDetailsHeader = "MovieDetailsHeader"
     case movieDetailsFooter = "MovieDetailsFooter"
 }
 

@@ -24,6 +24,7 @@ class AppCoordinator {
     
     private func setFirstCoordinator() {
         let movieCoordinator = MovieCoordinator()
+        movieCoordinator.start()
         childCoordinator = movieCoordinator
         window.rootViewController = movieCoordinator.containerViewController
         window.makeKeyAndVisible()

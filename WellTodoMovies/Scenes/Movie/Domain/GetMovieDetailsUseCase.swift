@@ -23,7 +23,7 @@ class GetMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol {
     }
 
     func execute(id: Int, success: Success? = nil, failure: Failure? = nil) {
-        api.getDetails(movieId: id) { (result) in
+        api.getDetails(movieId: id) { result in
             switch result {
             case let .success(response):
                 do {

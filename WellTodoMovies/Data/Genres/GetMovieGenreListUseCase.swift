@@ -23,7 +23,7 @@ class GetMovieGenreListUseCase: GetMovieGenreListUseCaseProtocol {
     }
 
     func execute(success: Success? = nil, failure: Failure? = nil) {
-        api.getForMovies { (result) in
+        api.getForMovies { result in
             switch result {
             case let .success(response):
                 do {

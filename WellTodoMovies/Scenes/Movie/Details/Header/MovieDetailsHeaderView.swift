@@ -26,8 +26,11 @@ class MovieDetailsHeaderView: UIView {
     // MARK: - UI Components
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var gradientView: UIView!
+    @IBOutlet private weak var infoStackView: UIStackView!
+    @IBOutlet private weak var titleStackView: UIStackView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var likeButtonImageView: UIImageView!
+    @IBOutlet private weak var aboutView: UIView!
     @IBOutlet private weak var likesImageView: UIImageView!
     @IBOutlet private weak var likesLabel: UILabel!
     @IBOutlet private weak var popularityImageView: UIImageView!
@@ -64,6 +67,39 @@ class MovieDetailsHeaderView: UIView {
     func setLikeButtonStatus(isSelected: Bool, animated: Bool = false) {
         if isSelected {
             likeButtonImageView.image = UIImage.heartFill
+            if animated {
+                let animatedImage = UIImageView.init(image: .heartFill)
+                animatedImage.tintColor = .white
+                animatedImage.frame = infoStackView.convert(likeButtonImageView.frame, from: titleStackView)
+                animatedImage.layoutIfNeeded()
+                infoStackView.addSubview(animatedImage)
+                
+                let scaleValue = likesImageView.frame.width / likeButtonImageView.frame.width
+                let scaleTransform = CGAffineTransform(scaleX: scaleValue, y: scaleValue)
+                
+                let finalWidth = likesImageView.frame.width / 4.0 - 1.0
+                let startPoint = CGPoint(x: animatedImage.frame.origin.x, y: animatedImage.frame.origin.y)
+                let finalFrame = infoStackView.convert(likesImageView.frame, from: aboutView)
+                let finalPoint = CGPoint(x: finalFrame.origin.x, y: finalFrame.origin.y)
+                let translationTransform = CGAffineTransform(translationX: finalPoint.x - startPoint.x - finalWidth,
+                                                             y: finalPoint.y - startPoint.y - finalWidth)
+                
+                UIView.animate(withDuration: 0.6, delay: 0.0,
+                               options: [.curveEaseIn], animations: {
+                    animatedImage.transform = scaleTransform.concatenating(translationTransform)
+                }, completion: { finished in
+                    animatedImage.removeFromSuperview()
+                    UIView.animate(withDuration: 0.1, delay: 0.2, options: [.curveEaseOut], animations: {
+                        self.likesImageView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+                    }, completion: { finished in
+                        UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseIn], animations: {
+                            self.likesImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                        }, completion: { finished in
+                            
+                        })
+                    })
+                })
+            }
         } else {
             likeButtonImageView.image = UIImage.heart
         }

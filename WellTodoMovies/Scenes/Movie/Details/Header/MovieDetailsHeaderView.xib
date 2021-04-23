@@ -107,7 +107,9 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="aboutView" destination="Egl-uN-dCb" id="DSb-pB-OVH"/>
                 <outlet property="gradientView" destination="ElK-Qc-BAN" id="REB-55-sO5"/>
+                <outlet property="infoStackView" destination="IHL-d3-ynQ" id="yrV-xu-bQP"/>
                 <outlet property="likeButtonImageView" destination="4vE-pe-MLL" id="l6w-km-EOq"/>
                 <outlet property="likesImageView" destination="7NJ-lV-GEl" id="NH0-ti-FMp"/>
                 <outlet property="likesLabel" destination="9vk-wt-g09" id="ojM-gT-8Sg"/>
@@ -115,6 +117,7 @@
                 <outlet property="popularityLabel" destination="sQc-6f-Y1x" id="WgO-Tn-Xh6"/>
                 <outlet property="posterImageView" destination="deL-Eq-yGe" id="nYD-sx-dpo"/>
                 <outlet property="titleLabel" destination="VdK-pG-j3X" id="avC-ST-1Y6"/>
+                <outlet property="titleStackView" destination="VH7-Gu-Y16" id="FRm-yc-llX"/>
             </connections>
             <point key="canvasLocation" x="-20" y="93"/>
         </view>

@@ -41,8 +41,14 @@ class MovieDetailsController<ViewModel: MovieDetailsProtocol>: UIViewController 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
         bind()
-        viewModel.fetchSimilarMovies()
+        viewModel.fetchMovie()
     }
 }
 
@@ -51,21 +57,8 @@ extension MovieDetailsController {
     private func bind() {
         contentView.bindIn(viewModel: viewModel)
         
-        viewModel.onStartGetSimilarMovies = { [weak self] in
-            print("TODO: show loading")
-        }
-        
-        viewModel.onEmptyGetSimilarMovies = { [weak self] in
-            print("TODO: alert is empty")
-        }
-
-        viewModel.onSuccessGetSimilarMovies = { [weak self] in
-            print("TODO: hide loading/alert")
-        }
-
-        viewModel.onFailureGetSimilarMovies = { [weak self] error in
-            print("TODO: alert error")
-            print(error)
+        viewModel.onTapSimilarMovie = { [weak self] movie in
+            self?.delegate?.goToSimilarMovie(movie: movie)
         }
     }
 }

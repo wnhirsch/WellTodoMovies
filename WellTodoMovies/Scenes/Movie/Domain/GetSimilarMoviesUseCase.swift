@@ -23,7 +23,7 @@ class GetSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol {
     }
 
     func execute(id: Int, page: Int, success: Success? = nil, failure: Failure? = nil) {
-        api.getSimilar(movieId: id, page: page) { (result) in
+        api.getSimilar(movieId: id, page: page) { result in
             switch result {
             case let .success(response):
                 do {

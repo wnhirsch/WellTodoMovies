@@ -34,3 +34,27 @@ struct MovieDetails: Decodable {
     var voteAverage: Double
     var voteCount: Int
 }
+
+extension MovieDetails {
+    
+    func toMovie() -> Movie {
+        return Movie(posterPath: self.posterPath,
+                     adult: self.adult,
+                     overview: self.overview,
+                     releaseDate: self.releaseDate,
+                     genreIds: self.genres.map({ $0.id }),
+                     id: self.id,
+                     originalTitle: self.originalTitle,
+                     originalLanguage: self.originalLanguage,
+                     title: self.title,
+                     backdropPath: self.backdropPath,
+                     popularity: self.popularity,
+                     video: self.video,
+                     voteAverage: self.voteAverage,
+                     voteCount: self.voteCount)
+    }
+}
+
+
+
+

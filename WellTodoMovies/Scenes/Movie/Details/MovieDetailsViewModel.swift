@@ -11,41 +11,75 @@ import Foundation
 protocol MovieDetailsProtocol: MovieDetailsViewModelProtocol {
     var onTapSimilarMovie: ((Movie) -> Void)? { get set }
     
-    var onStartGetSimilarMovies: (() -> Void)? { get set }
-    var onEmptyGetSimilarMovies: (() -> Void)? { get set }
-    var onSuccessGetSimilarMovies: (() -> Void)? { get set }
-    var onFailureGetSimilarMovies: ((String) -> Void)? { get set }
-    
-    func fetchSimilarMovies()
+    func fetchMovie()
 }
 
 class MovieDetailsViewModel: MovieDetailsProtocol {
     
-    private let getSimilarMoviesUseCase: GetSimilarMoviesUseCase
+    private let movieID: Int
+    private let getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol
+    private let getSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol
+    
+    private var movie: Movie?
+    private var movieDetails: MovieDetails? {
+        didSet {
+            onChangeMovieDetails?(headerViewModel)
+        }
+    }
+    
     private var actualPage: Int = 1
     private var totalPages: Int = 1
     private var cachedSimilarMovies: [Movie] = []
     var isLoadingSimilarMovies: Bool = false
     
-    var onStartGetSimilarMovies: (() -> Void)?
-    var onEmptyGetSimilarMovies: (() -> Void)?
-    var onSuccessGetSimilarMovies: (() -> Void)?
-    var onFailureGetSimilarMovies: ((String) -> Void)?
+    var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)?
     
     var onSetSimilarMovies: ((SimilarMovieSection) -> Void)?
     var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)?
     var onTapSimilarMovie: ((Movie) -> Void)?
     
-    init(getSimilarMoviesUseCase: GetSimilarMoviesUseCase) {
+    init(movieID: Int, getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol,
+         getSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol) {
+        self.movieID = movieID
+        self.getMovieDetailsUseCase = getMovieDetailsUseCase
         self.getSimilarMoviesUseCase = getSimilarMoviesUseCase
     }
     
+    init(movie: Movie, getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol,
+         getSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol) {
+        self.movieID = movie.id
+        self.movie = movie
+        self.getMovieDetailsUseCase = getMovieDetailsUseCase
+        self.getSimilarMoviesUseCase = getSimilarMoviesUseCase
+    }
+    
+    var headerViewModel: MovieDetailsHeaderViewModelProtocol {
+        return MovieDetailsHeaderViewModel(movie: movie ?? movieDetails?.toMovie())
+    }
+    
     func clickMovie(movie: Movie) {
-        
+        onTapSimilarMovie?(movie)
     }
 }
 
 extension MovieDetailsViewModel {
+    
+    func fetchMovie() {
+        if movie == nil {
+            fetchMovieDetails()
+        } else {
+            fetchSimilarMovies()
+        }
+    }
+    
+    func fetchMovieDetails() {
+        getMovieDetailsUseCase.execute(id: movieID, success: { [weak self] movieDetails in
+            self?.movieDetails = movieDetails
+            self?.fetchSimilarMovies()
+        }, failure: { error in
+            print(error.statusMessage)
+        })
+    }
     
     func fetchSimilarMovies() {
         isLoadingSimilarMovies = true
@@ -63,16 +97,12 @@ extension MovieDetailsViewModel {
     }
     
     private func getSimilarMovies() {
-        if cachedSimilarMovies.isEmpty {
-            onStartGetSimilarMovies?()
-        }
-        
-        getSimilarMoviesUseCase.execute(id: 550, page: actualPage, success: { [weak self] movies in
+        getSimilarMoviesUseCase.execute(id: movieID, page: actualPage, success: { [weak self] movies in
             self?.totalPages = 1 // movies.totalPages
             self?.handleSuccess(movies: movies.results)
             self?.isLoadingSimilarMovies = false
-        }, failure: { [weak self] (error) in
-            self?.onFailureGetSimilarMovies?(error.statusMessage)
+        }, failure: { [weak self] error in
+            print(error.statusMessage)
             self?.isLoadingSimilarMovies = false
         })
     }
@@ -85,11 +115,6 @@ extension MovieDetailsViewModel {
         if actualPage > 1 {
             onAppendSimilarMovies?(section)
         } else {
-            if cachedSimilarMovies.isEmpty {
-                onEmptyGetSimilarMovies?()
-            } else {
-                onSuccessGetSimilarMovies?()
-            }
             onSetSimilarMovies?(section)
         }
     }

@@ -13,16 +13,22 @@ class MovieCoordinator: CoordinatorProtocol {
     weak var childDelegate: ChildCoordinatorDelegate?
 
     var containerViewController: UIViewController {
-        return movieController
+        return navigationController
     }
-
-    private lazy var movieController = MovieFactory.movie(delegate: self)
+    
+    private let navigationController = UINavigationController()
+    
+    func start() {
+        let movieVc = MovieFactory.movie(movieID: 550, delegate: self)
+        navigationController.pushViewController(movieVc, animated: false)
+    }
 }
 
 extension MovieCoordinator: MovieDetailsControllerDelegate {
 
     func goToSimilarMovie(movie: Movie) {
-        
+        let movieVc = MovieFactory.movie(movie: movie, delegate: self)
+        navigationController.pushViewController(movieVc, animated: true)
     }
     
 }
