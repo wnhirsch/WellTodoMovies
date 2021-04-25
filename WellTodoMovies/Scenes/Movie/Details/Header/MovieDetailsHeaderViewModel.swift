@@ -10,12 +10,15 @@ import Foundation
 class MovieDetailsHeaderViewModel: MovieDetailsHeaderViewModelProtocol {
 
     private let movie: Movie?
+    private var onLikeChange: ((Bool) -> Void)?
     var isLiked: Bool = false
     
-    var onLikeChange: ((Bool) -> Void)?
+    var onUpdateLikeButton: ((Bool) -> Void)?
     
-    init(movie: Movie?) {
+    init(movie: Movie?, isLiked: Bool, onLikeChange: ((Bool) -> Void)?) {
         self.movie = movie
+        self.isLiked = isLiked
+        self.onLikeChange = onLikeChange
     }
     
     var posterURL: URL {
@@ -51,6 +54,7 @@ class MovieDetailsHeaderViewModel: MovieDetailsHeaderViewModelProtocol {
     
     func likeButtonClick() {
         isLiked = !isLiked
+        onUpdateLikeButton?(isLiked)
         onLikeChange?(isLiked)
     }
 }

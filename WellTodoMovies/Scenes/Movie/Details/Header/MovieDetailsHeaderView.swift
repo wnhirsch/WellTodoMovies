@@ -14,7 +14,7 @@ protocol MovieDetailsHeaderViewModelProtocol {
     var likes: String { get }
     var popularity: String { get }
     
-    var onLikeChange: ((Bool) -> Void)? { get set }
+    var onUpdateLikeButton: ((Bool) -> Void)? { get set }
     
     func likeButtonClick()
 }
@@ -52,7 +52,7 @@ class MovieDetailsHeaderView: UIView {
         likesLabel.text = viewModel.likes
         popularityLabel.text = viewModel.popularity
         
-        self.viewModel?.onLikeChange = { [weak self] isLiked in
+        self.viewModel?.onUpdateLikeButton = { [weak self] isLiked in
             self?.setLikeButtonStatus(isSelected: isLiked, animated: true)
         }
         
@@ -114,7 +114,7 @@ class MovieDetailsHeaderView: UIView {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= gradientView.frame.minY {
+        if scrollView.contentOffset.y <= max(gradientView.frame.minY, 0.0) {
             imageTopConstraint.constant = -scrollView.contentOffset.y
         }
     }
@@ -151,7 +151,8 @@ extension MovieDetailsHeaderView {
     
     private func setupGradientView() {
         let gradient = CAGradientLayer()
-        gradient.frame = gradientView.bounds
+        gradient.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
+                                height: gradientView.frame.height)
         gradient.colors = [UIColor.clear.cgColor,
                            UIColor.black.withAlphaComponent(0.3).cgColor,
                            UIColor.black.withAlphaComponent(0.8).cgColor,

@@ -11,8 +11,8 @@ protocol MovieDetailsFooterViewModelProtocol {
     var isLiked: Bool { get }
     var isOnMyLists: Bool { get }
     
-    var onLikeChange: ((Bool) -> Void)? { get set }
-    var onMyListsChange: ((Bool) -> Void)? { get set }
+    var onUpdateLikeButton: ((Bool) -> Void)? { get set }
+    var onUpdateMyListsButton: ((Bool) -> Void)? { get set }
     
     func likeButtonClick()
     func myListButtonClick()
@@ -36,12 +36,8 @@ class MovieDetailsFooterView: UIView {
     func bindIn(viewModel: MovieDetailsFooterViewModelProtocol) {
         self.viewModel = viewModel
         
-        self.viewModel?.onLikeChange = { [weak self] isLiked in
-            self?.setLikeButtonStatus(isSelected: isLiked)
-        }
-        self.viewModel?.onMyListsChange = { [weak self] isOnMyLists in
-            self?.setMyListsButtonStatus(isSelected: isOnMyLists)
-        }
+        self.viewModel?.onUpdateLikeButton = setLikeButtonStatus
+        self.viewModel?.onUpdateMyListsButton = setMyListsButtonStatus
         
         setLikeButtonStatus(isSelected: viewModel.isLiked)
         setMyListsButtonStatus(isSelected: viewModel.isOnMyLists)

@@ -26,10 +26,11 @@ class MovieDetailsViewModel: MovieDetailsProtocol {
     private let getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol
     private let getSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol
     
+    private var isLiked: Bool = false
     private var movie: Movie?
     private var movieDetails: MovieDetails? {
         didSet {
-            onChangeMovieDetails?(headerViewModel)
+            onChangeMovieHeader?(headerViewModel)
         }
     }
     
@@ -41,7 +42,9 @@ class MovieDetailsViewModel: MovieDetailsProtocol {
     var onStartGetMovieDetails: (() -> Void)?
     var onSuccessGetMovieDetails: (() -> Void)?
     var onFailureGetMovieDetails: ((String) -> Void)?
-    var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)?
+    
+    var onChangeMovieHeader: ((MovieDetailsHeaderViewModelProtocol) -> Void)?
+    var onChangeMovieFooter: ((MovieDetailsFooterViewModelProtocol) -> Void)?
     
     var onStartGetSimilarMovies: (() -> Void)?
     var onFailureGetSimilarMovies: ((String) -> Void)?
@@ -66,7 +69,20 @@ class MovieDetailsViewModel: MovieDetailsProtocol {
     }
     
     var headerViewModel: MovieDetailsHeaderViewModelProtocol {
-        return MovieDetailsHeaderViewModel(movie: movie ?? movieDetails?.toMovie())
+        return MovieDetailsHeaderViewModel(movie: movie ?? movieDetails?.toMovie(),
+                                           isLiked: isLiked, onLikeChange: updateTableFooter)
+    }
+    var footerViewModel: MovieDetailsFooterViewModelProtocol {
+        return MovieDetailsFooterViewModel(isLiked: isLiked, onLikeChange: updateTableHeader)
+    }
+    
+    private func updateTableHeader(isLiked: Bool) {
+        self.isLiked = isLiked
+        onChangeMovieHeader?(headerViewModel)
+    }
+    private func updateTableFooter(isLiked: Bool) {
+        self.isLiked = isLiked
+        onChangeMovieFooter?(footerViewModel)
     }
     
     func clickMovie(movie: Movie) {
@@ -115,7 +131,8 @@ extension MovieDetailsViewModel {
         onStartGetSimilarMovies?()
         
         getSimilarMoviesUseCase.execute(id: movieID, page: actualPage, success: { [weak self] movies in
-            self?.totalPages = 1 // movies.totalPages
+            self?.totalPages = 1 // Comment this line
+//            self?.totalPages = movies.totalPages // and uncomment this line
             self?.handleSuccess(movies: movies.results)
             self?.isLoadingSimilarMovies = false
         }, failure: { [weak self] error in

@@ -9,6 +9,7 @@ import UIKit
 
 protocol MovieDetailsViewModelProtocol {
     var headerViewModel: MovieDetailsHeaderViewModelProtocol { get }
+    var footerViewModel: MovieDetailsFooterViewModelProtocol { get }
     var isLoadingSimilarMovies: Bool { get }
     
     var onStartGetSimilarMovies: (() -> Void)? { get set }
@@ -16,7 +17,8 @@ protocol MovieDetailsViewModelProtocol {
     var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
     var onEndGetSimilarMovies: (() -> Void)? { get set }
     
-    var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)? { get set }
+    var onChangeMovieHeader: ((MovieDetailsHeaderViewModelProtocol) -> Void)? { get set }
+    var onChangeMovieFooter: ((MovieDetailsFooterViewModelProtocol) -> Void)? { get set }
     
     func fetchMoreSimilarMovies()
 }
@@ -40,9 +42,13 @@ class MovieDetailsView: UIView {
     func bindIn(viewModel: MovieDetailsProtocol) {
         self.viewModel = viewModel
         
-        self.viewModel?.onChangeMovieDetails = { [weak self] headerViewModel in
+        self.viewModel?.onChangeMovieHeader = { [weak self] headerViewModel in
             self?.setupTableHeaderView(viewModel: headerViewModel)
         }
+        self.viewModel?.onChangeMovieFooter = { [weak self] footerViewModel in
+            self?.setupTableFooterView(viewModel: footerViewModel)
+        }
+        
         self.viewModel?.onStartGetSimilarMovies = { [weak self] in
             self?.tableDataSource.sections.append(LoadingSection())
         }
@@ -58,6 +64,7 @@ class MovieDetailsView: UIView {
         }
         
         setupTableHeaderView(viewModel: viewModel.headerViewModel)
+        setupTableFooterView(viewModel: viewModel.footerViewModel)
     }
     
     // MARK: - Utils
@@ -65,6 +72,12 @@ class MovieDetailsView: UIView {
         let headerView = MovieDetailsHeaderView.loadNib()
         headerView.bindIn(viewModel: viewModel)
         tableView.tableHeaderView = headerView
+    }
+    
+    func setupTableFooterView(viewModel: MovieDetailsFooterViewModelProtocol) {
+        let footerView = MovieDetailsFooterView.loadNib()
+        footerView.bindIn(viewModel: viewModel)
+        tableView.tableFooterView = footerView
     }
 }
 
@@ -83,11 +96,6 @@ extension MovieDetailsView {
         tableView.showsVerticalScrollIndicator = true
         tableView.insetsContentViewsToSafeArea = false
         tableView.contentInsetAdjustmentBehavior = .never
-        
-        let footerView = MovieDetailsFooterView.loadNib()
-        footerView.bindIn(viewModel: MovieDetailsFooterViewModel())
-        tableView.tableFooterView = footerView
-        
         tableDataSource.tableView = tableView
         tableDataSource.scrollDelegate = self
     }
