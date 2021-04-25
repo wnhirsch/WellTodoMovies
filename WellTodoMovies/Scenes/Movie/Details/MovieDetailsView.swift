@@ -11,9 +11,12 @@ protocol MovieDetailsViewModelProtocol {
     var headerViewModel: MovieDetailsHeaderViewModelProtocol { get }
     var isLoadingSimilarMovies: Bool { get }
     
-    var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)? { get set }
+    var onStartGetSimilarMovies: (() -> Void)? { get set }
     var onSetSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
     var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)? { get set }
+    var onEndGetSimilarMovies: (() -> Void)? { get set }
+    
+    var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)? { get set }
     
     func fetchMoreSimilarMovies()
 }
@@ -40,11 +43,18 @@ class MovieDetailsView: UIView {
         self.viewModel?.onChangeMovieDetails = { [weak self] headerViewModel in
             self?.setupTableHeaderView(viewModel: headerViewModel)
         }
+        self.viewModel?.onStartGetSimilarMovies = { [weak self] in
+            self?.tableDataSource.sections.append(LoadingSection())
+        }
         self.viewModel?.onSetSimilarMovies = { [weak self] section in
             self?.tableDataSource.sections = [section]
         }
         self.viewModel?.onAppendSimilarMovies = { [weak self] section in
+            self?.tableDataSource.sections.removeLast()
             self?.tableDataSource.sections.append(section)
+        }
+        self.viewModel?.onEndGetSimilarMovies = { [weak self] in
+            self?.tableDataSource.sections.removeLast()
         }
         
         setupTableHeaderView(viewModel: viewModel.headerViewModel)

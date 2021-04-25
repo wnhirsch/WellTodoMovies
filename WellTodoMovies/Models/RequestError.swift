@@ -15,6 +15,6 @@ struct RequestError: Decodable {
 extension RequestError {
     
     static func defaultError() -> RequestError {
-        return RequestError(statusMessage: "request.error.decode".localized(context: .default), statusCode: 422)
+        return RequestError(statusMessage: "error.request.decode".localized(context: .default), statusCode: 422)
     }
 }

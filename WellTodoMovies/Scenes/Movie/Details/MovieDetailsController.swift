@@ -11,7 +11,7 @@ protocol MovieDetailsControllerDelegate: AnyObject {
     func goToSimilarMovie(movie: Movie)
 }
 
-class MovieDetailsController<ViewModel: MovieDetailsProtocol>: UIViewController {
+class MovieDetailsController<ViewModel: MovieDetailsProtocol>: UIViewController, Loadable {
     
     private var viewModel: ViewModel
     private let contentView: MovieDetailsView
@@ -64,8 +64,36 @@ extension MovieDetailsController {
     private func bind() {
         contentView.bindIn(viewModel: viewModel)
         
+        viewModel.onStartGetMovieDetails = { [weak self] in
+            self?.showLoading()
+        }
+        
+        viewModel.onSuccessGetMovieDetails = { [weak self] in
+            self?.hideLoading()
+        }
+        
+        viewModel.onFailureGetMovieDetails = { [weak self] error in
+            self?.showErrorAlert(message: error)
+        }
+        
+        viewModel.onFailureGetSimilarMovies = { [weak self] error in
+            self?.showErrorAlert(message: error)
+        }
+        
         viewModel.onTapSimilarMovie = { [weak self] movie in
             self?.delegate?.goToSimilarMovie(movie: movie)
         }
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(title: "error.title".localized(context: .default),
+                                      message: message, preferredStyle: .alert)
+        
+        let ok = UIAlertAction(title: "ok".localized(context: .default), style: .default) { _ in
+            self.navigationController?.popViewController(animated: true)
+        }
+        alert.addAction(ok)
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }

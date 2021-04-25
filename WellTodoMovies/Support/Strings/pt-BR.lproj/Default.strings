@@ -1,1 +1,4 @@
-"request.error.decode" = "Erro ao computar resposta do servidor.";
+"error.request.decode" = "Erro ao computar resposta do servidor.";
+"error.title" = "Erro";
+
+"ok" = "Ok";

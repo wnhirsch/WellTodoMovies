@@ -11,6 +11,12 @@ import Foundation
 protocol MovieDetailsProtocol: MovieDetailsViewModelProtocol {
     var onTapSimilarMovie: ((Movie) -> Void)? { get set }
     
+    var onStartGetMovieDetails: (() -> Void)? { get set }
+    var onSuccessGetMovieDetails: (() -> Void)? { get set }
+    var onFailureGetMovieDetails: ((String) -> Void)? { get set }
+    
+    var onFailureGetSimilarMovies: ((String) -> Void)? { get set }
+    
     func fetchMovie()
 }
 
@@ -32,12 +38,18 @@ class MovieDetailsViewModel: MovieDetailsProtocol {
     private var cachedSimilarMovies: [Movie] = []
     var isLoadingSimilarMovies: Bool = false
     
+    var onStartGetMovieDetails: (() -> Void)?
+    var onSuccessGetMovieDetails: (() -> Void)?
+    var onFailureGetMovieDetails: ((String) -> Void)?
     var onChangeMovieDetails: ((MovieDetailsHeaderViewModelProtocol) -> Void)?
     
+    var onStartGetSimilarMovies: (() -> Void)?
+    var onFailureGetSimilarMovies: ((String) -> Void)?
+    var onEndGetSimilarMovies: (() -> Void)?
     var onSetSimilarMovies: ((SimilarMovieSection) -> Void)?
     var onAppendSimilarMovies: ((SimilarMovieSection) -> Void)?
     var onTapSimilarMovie: ((Movie) -> Void)?
-    
+
     init(movieID: Int, getMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol,
          getSimilarMoviesUseCase: GetSimilarMoviesUseCaseProtocol) {
         self.movieID = movieID
@@ -73,11 +85,14 @@ extension MovieDetailsViewModel {
     }
     
     func fetchMovieDetails() {
+        onStartGetMovieDetails?()
+        
         getMovieDetailsUseCase.execute(id: movieID, success: { [weak self] movieDetails in
             self?.movieDetails = movieDetails
+            self?.onSuccessGetMovieDetails?()
             self?.fetchSimilarMovies()
-        }, failure: { error in
-            print(error.statusMessage)
+        }, failure: { [weak self] error in
+            self?.onFailureGetMovieDetails?(error.statusMessage)
         })
     }
     
@@ -97,12 +112,15 @@ extension MovieDetailsViewModel {
     }
     
     private func getSimilarMovies() {
+        onStartGetSimilarMovies?()
+        
         getSimilarMoviesUseCase.execute(id: movieID, page: actualPage, success: { [weak self] movies in
             self?.totalPages = 1 // movies.totalPages
             self?.handleSuccess(movies: movies.results)
             self?.isLoadingSimilarMovies = false
         }, failure: { [weak self] error in
-            print(error.statusMessage)
+            self?.onFailureGetSimilarMovies?(error.statusMessage)
+            self?.onEndGetSimilarMovies?()
             self?.isLoadingSimilarMovies = false
         })
     }

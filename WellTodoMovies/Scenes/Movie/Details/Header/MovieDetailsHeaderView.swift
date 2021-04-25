@@ -114,7 +114,7 @@ class MovieDetailsHeaderView: UIView {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if posterImageView.frame.minX <= gradientView.frame.minY {
+        if scrollView.contentOffset.y <= gradientView.frame.minY {
             imageTopConstraint.constant = -scrollView.contentOffset.y
         }
     }
