@@ -69,6 +69,7 @@ extension MovieDetailsView {
     private func setupTableView() {
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .singleLine
+        tableView.separatorInset = .init(top: 0, left: 92, bottom: 0, right: 0)
         tableView.showsVerticalScrollIndicator = true
         tableView.insetsContentViewsToSafeArea = false
         tableView.contentInsetAdjustmentBehavior = .never
@@ -100,5 +101,7 @@ extension MovieDetailsView: UIScrollViewDelegate {
             scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height) {
             viewModel?.fetchMoreSimilarMovies()
         }
+        let headerView = tableView.tableHeaderView as! MovieDetailsHeaderView
+        headerView.scrollViewDidScroll(scrollView: scrollView)
     }
 }

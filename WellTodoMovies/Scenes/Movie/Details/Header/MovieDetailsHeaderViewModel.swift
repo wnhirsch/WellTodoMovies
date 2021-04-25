@@ -22,7 +22,7 @@ class MovieDetailsHeaderViewModel: MovieDetailsHeaderViewModelProtocol {
         return APIHost.baseImageURL.appendingPathComponent(movie?.posterPath ?? String())
     }
     var title: String {
-        return movie?.title ?? " "
+        return movie?.title ?? String()
     }
     var likes: String {
         guard let voteCount = movie?.voteCount else {

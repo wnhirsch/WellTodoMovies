@@ -34,10 +34,15 @@ class GetMovieDetailsUseCase: GetMovieDetailsUseCaseProtocol {
                     failure?(RequestError.defaultError())
                 }
             case let .failure(error):
-                do {
-                    let serverError = try error.response!.mapObject(RequestError.self)
-                    failure?(serverError)
-                } catch let error {
+                if let response = error.response {
+                    do {
+                        let serverError = try response.mapObject(RequestError.self)
+                        failure?(serverError)
+                    } catch let error {
+                        print(error)
+                        failure?(RequestError.defaultError())
+                    }
+                } else {
                     print(error)
                     failure?(RequestError.defaultError())
                 }

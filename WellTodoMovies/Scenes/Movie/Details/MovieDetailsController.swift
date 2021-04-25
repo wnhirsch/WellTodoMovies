@@ -41,11 +41,18 @@ class MovieDetailsController<ViewModel: MovieDetailsProtocol>: UIViewController 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Transparent Navigation Bar
         navigationController?.navigationBar.barStyle = .default
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
+        
+        // Back Button
+        navigationController?.navigationBar.backIndicatorImage = UIImage()
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage()
+        navigationItem.backBarButtonItem = UIBarButtonItem(image: .back, style: .plain, target: nil, action: nil)
         
         bind()
         viewModel.fetchMovie()

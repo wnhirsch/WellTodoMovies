@@ -22,12 +22,13 @@ protocol MovieDetailsHeaderViewModelProtocol {
 class MovieDetailsHeaderView: UIView {
     
     private var viewModel: MovieDetailsHeaderViewModelProtocol?
+    private var imageTopConstraint: NSLayoutConstraint = .init()
 
     // MARK: - UI Components
     @IBOutlet private weak var posterImageView: UIImageView!
     @IBOutlet private weak var gradientView: UIView!
     @IBOutlet private weak var infoStackView: UIStackView!
-    @IBOutlet private weak var titleStackView: UIStackView!
+    @IBOutlet private weak var titleView: UIView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var likeButtonImageView: UIImageView!
     @IBOutlet private weak var aboutView: UIView!
@@ -47,7 +48,7 @@ class MovieDetailsHeaderView: UIView {
         self.viewModel = viewModel
         
         posterImageView.imageBy(url: viewModel.posterURL, placeholder: UIImage.posterPlaceholder)
-        titleLabel.text = viewModel.title
+        titleLabel.setTextWithDynamicHeight(text: viewModel.title)
         likesLabel.text = viewModel.likes
         popularityLabel.text = viewModel.popularity
         
@@ -56,6 +57,7 @@ class MovieDetailsHeaderView: UIView {
         }
         
         setLikeButtonStatus(isSelected: viewModel.isLiked)
+        reloadConstrints()
     }
     
     // MARK: - Actions
@@ -70,7 +72,7 @@ class MovieDetailsHeaderView: UIView {
             if animated {
                 let animatedImage = UIImageView.init(image: .heartFill)
                 animatedImage.tintColor = .white
-                animatedImage.frame = infoStackView.convert(likeButtonImageView.frame, from: titleStackView)
+                animatedImage.frame = infoStackView.convert(likeButtonImageView.frame, from: titleView)
                 animatedImage.layoutIfNeeded()
                 infoStackView.addSubview(animatedImage)
                 
@@ -104,12 +106,27 @@ class MovieDetailsHeaderView: UIView {
             likeButtonImageView.image = UIImage.heart
         }
     }
+    
+    func reloadConstrints() {
+        imageTopConstraint.constant = .zero
+        frame = CGRect(x: 0, y: 0, width: frame.width,
+                       height: UIScreen.main.bounds.height / 2 + infoStackView.frame.height)
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if posterImageView.frame.minX <= gradientView.frame.minY {
+            imageTopConstraint.constant = -scrollView.contentOffset.y
+        }
+    }
 }
 
 extension MovieDetailsHeaderView {
 
     private func setup() {
         backgroundColor = .black
+        clipsToBounds = false
+        setupConstraints()
+        
         setupPosterImageView()
         setupGradientView()
         setupTitleLabel()
@@ -120,8 +137,16 @@ extension MovieDetailsHeaderView {
         setupPopularityLabel()
     }
     
+    private func setupConstraints() {
+        frame = CGRect(x: 0, y: 0, width: frame.width,
+                       height: UIScreen.main.bounds.height / 2 + infoStackView.frame.height)
+        imageTopConstraint = topAnchor.constraint(equalTo: posterImageView.topAnchor, constant: .zero)
+        imageTopConstraint.isActive = true
+    }
+    
     private func setupPosterImageView() {
         posterImageView.contentMode = .scaleAspectFill
+        posterImageView.image = .posterPlaceholder
     }
     
     private func setupGradientView() {
@@ -139,6 +164,7 @@ extension MovieDetailsHeaderView {
     private func setupTitleLabel() {
         titleLabel.numberOfLines = 0
         titleLabel.font = UIFont.boldSystemFont(ofSize: 28)
+        titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.textColor = .white
     }
     

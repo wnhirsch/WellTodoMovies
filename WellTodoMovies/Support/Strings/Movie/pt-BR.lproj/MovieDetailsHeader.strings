@@ -1,0 +1,8 @@
+"likes.zero" = "Nenhuma curtida";
+"likes.one" = "1 Curtida";
+"likes.hundreds" = "%d Curtidas";
+"likes.thousands" = "%.1fK Curtidas";
+"likes.millions" = "%.1fM Curtidas";
+
+"views.zero" = "Ninguém Assistiu";
+"views.default" = "%.0f Assistiram";

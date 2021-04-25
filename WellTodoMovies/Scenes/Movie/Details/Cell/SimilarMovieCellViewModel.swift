@@ -32,13 +32,17 @@ struct SimilarMovieCellViewModel: SimilarMovieCellProtocol {
             .toString(format: Date.yearFormat)
     }
     var genres: String {
-        var genres: String = String()
+        var genres: String = .init()
+        var offset: Int = .zero
         for (index, genreId) in movie.genreIds.enumerated() {
-            let genre = Genres.shared.getMovieGenre(id: genreId) ?? String()
-            if index == 0 {
-                genres = genre
+            if let genre = Genres.shared.getMovieGenre(id: genreId) {
+                if index - offset == 0 {
+                    genres = genre
+                } else {
+                    genres.append(", \(genre)")
+                }
             } else {
-                genres.append(", \(genre)")
+                offset += 1
             }
         }
         return genres
