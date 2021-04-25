@@ -24,9 +24,6 @@ extension UILabel {
         self.text = text
         self.frame = CGRect(x: frame.minX, y: frame.minY,
                             width: frame.width, height: dynamicHeight)
-        
-        print(dynamicHeight)
-        print(self.frame)
     }
     
 }
