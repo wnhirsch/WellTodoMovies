@@ -10,6 +10,9 @@ import UIKit
 class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
 
     weak var scrollDelegate: UIScrollViewDelegate?
+    
+    var onUpdateHeaderView: (() -> Void)?
+    var onUpdateFooterView: (() -> Void)?
 
     var tableView: UITableView? {
         didSet {
@@ -24,6 +27,8 @@ class TableViewDataSource: NSObject, UITableViewDataSource, UITableViewDelegate 
         didSet {
             tableView?.reloadData()
             registerNibs()
+            onUpdateHeaderView?()
+            onUpdateFooterView?()
         }
     }
     

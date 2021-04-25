@@ -63,6 +63,13 @@ class MovieDetailsView: UIView {
             self?.tableDataSource.sections.removeLast()
         }
         
+        self.tableDataSource.onUpdateHeaderView = { [weak self] in
+            self?.setupTableHeaderView(viewModel: viewModel.headerViewModel)
+        }
+        self.tableDataSource.onUpdateFooterView = { [weak self] in
+            self?.setupTableFooterView(viewModel: viewModel.footerViewModel)
+        }
+        
         setupTableHeaderView(viewModel: viewModel.headerViewModel)
         setupTableFooterView(viewModel: viewModel.footerViewModel)
     }
@@ -102,7 +109,8 @@ extension MovieDetailsView {
     
     private func setupStatusBarBackgroundView() {
         let gradient = CAGradientLayer()
-        gradient.frame = statusBarBackgroundView.bounds
+        gradient.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width,
+                                height: statusBarBackgroundView.frame.height)
         gradient.colors = [UIColor.black.withAlphaComponent(0.4).cgColor,
                            UIColor.black.withAlphaComponent(0.2).cgColor,
                            UIColor.clear.cgColor]
